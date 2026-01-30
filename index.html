@@ -144,15 +144,56 @@ button{
 </div>
 
 <script>
-let time = 10;
-let countdown = document.getElementById("countdown");
-let content = document.getElementById("content");
-let song = document.getElementById("song");
+window.onload = function () {
 
-let timer = setInterval(()=>{
-  time--;
-  countdown.innerHTML = time;
+  let time = 10;
+  let countdown = document.getElementById("countdown");
+  let content = document.getElementById("content");
+  let song = document.getElementById("song");
 
-  if(time === 0){
-    clearInterval(timer);
-    countdown.style.display
+  countdown.innerText = time;
+
+  let timer = setInterval(() => {
+    time--;
+    countdown.innerText = time;
+
+    if (time <= 0) {
+      clearInterval(timer);
+      countdown.style.display = "none";
+      content.classList.remove("hidden");
+
+      // Play song
+      song.play().catch(() => {
+        document.body.addEventListener("click", () => song.play(), { once: true });
+      });
+
+      // Balloons
+      for (let i = 0; i < 15; i++) {
+        let b = document.createElement("div");
+        b.className = "balloon";
+        b.style.left = Math.random() * 100 + "%";
+        b.innerHTML = "🎈";
+        document.body.appendChild(b);
+      }
+
+      // Crackers
+      setInterval(() => {
+        let c = document.createElement("div");
+        c.className = "cracker";
+        c.style.left = Math.random() * 100 + "%";
+        c.style.top = Math.random() * 100 + "%";
+        c.innerHTML = "🎆";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 1000);
+      }, 300);
+    }
+  }, 1000);
+};
+
+// WhatsApp share
+function shareWhatsApp() {
+  let text = "🎉 I made a special birthday website for my sister 💖";
+  let url = window.location.href;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text + " " + url)}`);
+}
+</script>
